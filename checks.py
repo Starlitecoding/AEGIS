@@ -1,0 +1,43 @@
+import requests
+
+def check_http(url: str):  
+    try:
+        print("Sending GET request...")
+        r = requests.get(url, timeout = 5)   
+        print(f"{r.status_code}")
+        return r.status_code
+    except requests.exceptions.ConnectionError:
+        print("Connection failed")
+        return None
+    except requests.exceptions.Timeout:
+        print("Connection timeout (5s reached)")
+        return None
+
+
+def classify_health(status_code):
+    match status_code:
+        case int() if 200 <= status_code <= 299:
+            return "HEALTHY"
+        case int() if 300 <= status_code <= 499:
+            return "DEGRADED"
+        case int() if 500 <= status_code <= 599:
+            return "DOWN"
+        case None:
+            return "DOWN"
+
+url_list = ["http://127.0.0.1:8001", "http://127.0.0.1:8002", "http://127.0.0.1:1234"]
+
+# for i in url_list:
+#     print(i)
+#     result = check_http(i)
+#     classify_health(result)
+#     print("-------------")
+    
+print(classify_health(200))
+print(classify_health(404))
+print(classify_health(502))
+print(classify_health(None))
+
+
+
+
