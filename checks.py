@@ -4,7 +4,7 @@ def check_http(url: str):
     try:
         print("Sending GET request...")
         r = requests.get(url, timeout = 5)   
-        print(f"{r.status_code}")
+        # print(f"{r.status_code}")
         return r.status_code
     except requests.exceptions.ConnectionError:
         print("Connection failed")
@@ -27,16 +27,31 @@ def classify_health(status_code):
 
 url_list = ["http://127.0.0.1:8001", "http://127.0.0.1:8002", "http://127.0.0.1:1234"]
 
-# for i in url_list:
-#     print(i)
-#     result = check_http(i)
-#     classify_health(result)
-#     print("-------------")
-    
-print(classify_health(200))
-print(classify_health(404))
-print(classify_health(502))
-print(classify_health(None))
+
+
+def check_services(url_list):
+    checkedUrlist = []
+    for i in url_list:
+        result = check_http(i)
+        healthResult = classify_health(result)
+        service = {
+           "url": i,
+           "status-code": result,
+           "health": healthResult
+        }
+        checkedUrlist.append(service)
+    return checkedUrlist
+
+
+
+
+if __name__ == "__main__":
+    print(check_services(url_list))
+
+# print(classify_health(200))
+# print(classify_health(404))
+# print(classify_health(502))
+# print(classify_health(None))
 
 
 
