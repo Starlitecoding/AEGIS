@@ -11,6 +11,8 @@ app = FastAPI(docs_url="/doc")
 
 initMessage = "AEGIS API, v1.0"
 
+list_services = []
+
 @app.get("/")
 async def root():
     return {"message": initMessage}
@@ -25,16 +27,21 @@ async def api_health_live():
 async def api_health_ready():
     return {"status": "200"}
 
-@app.get("/service_list")
+@app.get("/services")
 async def service_list():
     return list_services
 
 @app.get("/health/services")
 def service_health():
-    results = checks.check_services(config.url_list)
+    list_url = []
+    for i in list_services:
+        list_url.append(i["url"])
+    
+
+    results = checks.check_services(list_url)
     return results
 
-list_services = []
+
 @app.post("/service_add", status_code=201)
 async def create_service(input: ServiceCreate):
     new_service = {
