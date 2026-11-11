@@ -1,4 +1,5 @@
 import requests
+import config
 
 def check_http(url: str):  
     try:
@@ -25,7 +26,6 @@ def classify_health(status_code):
         case None:
             return "DOWN"
 
-url_list = ["http://127.0.0.1:8001", "http://127.0.0.1:8002", "http://127.0.0.1:1234"]
 
 
 
@@ -46,7 +46,7 @@ def check_services(url_list):
 
 
 if __name__ == "__main__":
-    print(check_services(url_list))
+    print(check_services(config.url_list))
 
 # print(classify_health(200))
 # print(classify_health(404))
